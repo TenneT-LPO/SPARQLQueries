@@ -1,0 +1,16 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+
+SELECT ?docName ?dcc WHERE {
+ ?docuri skos:prefLabel ?docName.
+ ?docuri <http://lpo.tennet.eu/data/def/14cf477313f196c912a7d5b3721dc5a2> ?dcc.
+ ?docuri rdfs:subClassOf ?x.
+ ?x a owl:Restriction.
+ ?x owl:onClass ?phase. 
+ ?phase skos:prefLabel "Detailed Design".
+}
