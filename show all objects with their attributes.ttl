@@ -1,0 +1,30 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX tennet: <http://data.tennet.eu/def/>
+PREFIX nen2660: <https://w3id.org/nen2660/def#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?genericUri 
+                ?objectName 
+                ?aspectUri 
+                ?datapropertyUri 
+                ?datapropertyName 
+                ?datapropertyDescription
+
+WHERE {
+    ?genericUri rdfs:subClassOf* nen2660:RealObject .
+    ?genericUri skos:prefLabel ?objectName .
+  
+    ?genericUri rdfs:subClassOf ?aspectUri.
+    ?aspectUri a owl:Restriction .
+    ?aspectUri owl:onProperty ?datapropertyUri.
+  
+  ?datapropertyUri skos:prefLabel ?datapropertyName.
+  
+  Optional{
+    ?datapropertyUri skos:definition ?datapropertyDescription . 
+    FILTER(LANG(?datapropertyDescription) = "en")}
+
+}
