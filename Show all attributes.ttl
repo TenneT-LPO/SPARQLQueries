@@ -1,0 +1,100 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX tennet: <http://lpo.tennet.eu/data/def/>
+PREFIX nen2660: <https://w3id.org/nen2660/def#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?genericUri 
+                ?name
+        ?abbreviation
+        ?note
+                ?REF_GIS_UNC_Name 
+                ?REF_GIS_UNC_Code
+                ?IEC_61970_base_model
+                ?REF_IEC_CDD_Code
+                ?REF_IEC_CDD_Name
+                ?REF_IEC_CIM_Code
+                ?REF_TCT_Code
+                ?REF_IEC_RDS_Code
+                ?REF_IEC_RDS_Name
+                ?REF_SAP4_HANA_Code
+                ?REF_SAP4_HANA_Name
+                ?REF_GIS_UNM_Code
+                ?REF_GIS_UNM_Name
+                ?AM_Standaarden_Database
+                ?DCC
+                ?Electropedia
+                ?REF_AM_STDB_Code
+                ?REF_AM_STDB_Name
+                ?REF_BIS_OFS_Code
+                ?REF_BIS_OFS_Name
+                ?REF_IEC_RDS2_Code
+                ?REF_IEC_RDS2_Name
+                ?REF_RACI_Code
+                ?REF_RACI_Name
+                ?REF_SAP_BIS_Code
+                ?REF_SAP_BIS_Name
+                ?REF_SISNET_Code
+                ?REF_SISNET_Name
+                ?REF_TAG22_Code
+                ?REF_TAG22_Name
+                ?REF_TAG5_Code
+                ?REF_TAG5_Name
+                ?REF_TCT_Name
+                ?REF_VGB_S_891_Code
+                ?REF_VGB_S_891_Name
+                ?Required
+                ?Responsibility
+                ?Size
+                ?Type
+                ?Utility_Network_Community_GIS_Mappings
+
+WHERE {
+    ?genericUri rdfs:subClassOf* nen2660:RealObject .
+    ?genericUri skos:prefLabel ?name .
+    
+  Optional{?genericUri  skos:note  ?note.}
+    Optional{?genericUri nen2660:abbreviation ?abbreviation.}
+    Optional{?genericUri tennet:cb4a30a34f978b8f44def579d1d74d00 ?REF_GIS_UNC_Name .} 
+    Optional{?genericUri tennet:deb44fef0ae1d8236151e5979d899e2f ?REF_GIS_UNC_Code .}
+    Optional{?genericUri tennet:ae0ca052ef616524a4c07c851876bab8 ?IEC_61970_base_model .} 
+    Optional{?genericUri tennet:41b0f00f3c009a1c88c4cfd318db36ae ?REF_IEC_CDD_Code .} 
+    Optional{?genericUri tennet:687d04617ca98c0957d84d83c33a16a5 ?REF_IEC_CDD_Name .} 
+    Optional{?genericUri tennet:48a7f18fdecb4e837fd2d0d1dbafadb4 ?REF_IEC_CIM_Code .} 
+    Optional{?genericUri tennet:3eafdcde1fd8d4c8679d6f4213a12fca ?REF_TCT_Code .} 
+    Optional{?genericUri tennet:8832ee6fb83a9bf33e5dd046bd1e1c5e ?REF_IEC_RDS_Code .} 
+    Optional{?genericUri tennet:a2bbb05b8172b3ab0407e86c1566be24 ?REF_IEC_RDS_Name .} 
+    Optional{?genericUri tennet:faa44c9e036b2a09caa2dcb3a5dfcf81 ?REF_SAP4_HANA_Code .} 
+    Optional{?genericUri tennet:ccae59770361d9577c92628fdffe30c5 ?REF_SAP4_HANA_Name .} 
+    Optional{?genericUri tennet:ffd2c4de691f10d9f283b26edf179af5 ?REF_GIS_UNM_Code .} 
+    Optional{?genericUri tennet:725137a87c591f4d8fd1d7b546d5fcd1 ?REF_GIS_UNM_Name .} 
+    Optional{?genericUri tennet:63a0c49a7b6b3019f3c47ca43eabe837 ?AM_Standaarden_Database .} 
+    Optional{?genericUri tennet:8e5426193ef58e9ed319c82f5956c0d3 ?DCC .} 
+    Optional{?genericUri tennet:2547bdbe7fdeb171f2d0366931b1138f ?Electropedia.} 
+    Optional{?genericUri tennet:49b35b6566b60fa4e49d09c7618db508 ?REF_AM_STDB_Code .} 
+    Optional{?genericUri tennet:0a79f5db8a960b1508b43af8faadb90f ?REF_AM_STDB_Name .} 
+    Optional{?genericUri tennet:3935780d9b679010e645a0ead6e00a1e ?REF_BIS_OFS_Code .} 
+    Optional{?genericUri tennet:ee234894826360bed8b218486eb7bfb7 ?REF_BIS_OFS_Name .} 
+    Optional{?genericUri tennet:c0aa60b28c013ca0b2cbdd0f4f3b331b ?REF_IEC_RDS2_Code .} 
+    Optional{?genericUri tennet:80af286267837a659533231bb9f60efe ?REF_IEC_RDS2_Name .} 
+    Optional{?genericUri tennet:e67aa1f1cda92186141fa8dce86fcd9c ?REF_RACI_Code .} 
+    Optional{?genericUri tennet:0c2de8dfcbc9977f17adb0f306379b90 ?REF_RACI_Name .} 
+    Optional{?genericUri tennet:659e56e85070ff99498815fb221d1282 ?REF_SAP_BIS_Code .} 
+    Optional{?genericUri tennet:1de51acc5a432f1dafb052fdcc90b475 ?REF_SAP_BIS_Name .} 
+    Optional{?genericUri tennet:46ec5a70761e67ac57a1c35242a4f448 ?REF_SISNET_Code .}    
+    Optional{?genericUri tennet:c1071dd771eb017562ebc95c73835b83 ?REF_SISNET_Name .}    
+    Optional{?genericUri tennet:3f001a805a5516c06fc35709d70714cd ?REF_TAG22_Code .}    
+    Optional{?genericUri tennet:16707d48fe43c07b37569d2b34867bd4 ?REF_TAG22_Name .}    
+    Optional{?genericUri tennet:04c2a33475f11299a0abd18b2aeee513 ?REF_TAG5_Code .}    
+    Optional{?genericUri tennet:b8d68d89aca9c121188ce9c6622da340 ?REF_TAG5_Name .}    
+    Optional{?genericUri tennet:6e5b67d77915fa44c29ffe828e0fb0a2 ?REF_TCT_Name .}    
+    Optional{?genericUri tennet:6b7173839e7a67b405d2c53af4887d8a ?REF_VGB_S_891_Code .}    
+    Optional{?genericUri tennet:b4f8e1a3df754b5f0d0676938af2fdf7 ?REF_VGB_S_891_Name .}    
+    Optional{?genericUri tennet:b651efdb98a5d6bd2b3935d0c3f4a5e2 ?Required .}    
+    Optional{?genericUri tennet:dee8af298acfc4c4bcb9fda657125917 ?Responsibility .}    
+    Optional{?genericUri tennet:6f6cb72d544962fa333e2e34ce64f719 ?Size .}    
+    Optional{?genericUri tennet:a1fa27779242b4902f7ae3bdd5c6d508 ?Type .}    
+    Optional{?genericUri tennet:0747f4ea45689fa774253e3237735852 ?Utility_Network_Community_GIS_Mappings .}    
+}
