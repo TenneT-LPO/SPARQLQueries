@@ -1,3 +1,4 @@
+
 PREFIX te: <http://www.w3.org/2006/time-entry#>
 PREFIX nen2660: <https://w3id.org/nen2660/def#>
 PREFIX ne: <http://umbel.org/umbel/ne/>
@@ -10,30 +11,59 @@ PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX sh: <http://www.w3.org/ns/shacl#>
 PREFIX tennet: <http://lpo.tennet.eu/data/def/>
 PREFIX base: <https://w3id.org/def/basicsemantics-owl#>
-
-select distinct ?RDSCode ?RDSName ?NameinKernelOTL ?aspectName ?propertyName ?propertyvalue
-from named  <http://hub.laces.tech/tennet/lpo/live/published-kernel-otl/versions/20240724035416>
-
+ 
+select distinct ?RDSName ?RDSCode ?KernelName ?aspectName ?AlternativeName ?Description ?Responsibility ?Required ?example ?datatype ?dataSize
+from named  <http://hub.laces.tech/tennet/lpo/live/published-kernel-otl/versions/20250121064628>
+ 
 where {
+
   ?objectUri a owl:Class;
-  		skos:prefLabel ?RDSName;
-  		skos:notation ?RDSCode.
+      skos:prefLabel ?RDSName;
+               skos:notation ?RDSCode.
+
+ 
   ?objectUri rdfs:subClassOf ?lpoKernelURI.
   filter not exists {?objectUri skos:definition "Kernel OTL Object"}
-  
+   
   ?lpoKernelURI a owl:Class;
   skos:prefLabel ?KernelName;
   skos:related ?KernelOTLUri.
-  
-    GRAPH <http://hub.laces.tech/tennet/lpo/live/published-kernel-otl/versions/20240724035416> {
-        ?KernelOTLUri a owl:Class.
-        ?KernelOTLUri skos:prefLabel ?NameinKernelOTL .
-        ?KernelOTLUri rdfs:subClassOf ?attributeRest .
-        ?attributeRest owl:onProperty ?aspectUri.
-        ?aspectUri a owl:DatatypeProperty. 
-        ?aspectUri skos:prefLabel ?aspectName .
-        ?aspectUri ?propertyuri ?propertyvalue .
-        ?propertyuri skos:prefLabel ?propertyName .
-    }
+ 
+  GRAPH <http://hub.laces.tech/tennet/lpo/live/published-kernel-otl/versions/20250121064628>
+{
+      ?KernelOTLUri rdfs:subClassOf* nen2660:RealObject.
+      ?KernelOTLUri nen2660:abbreviation ?NameinKernelOTL .
+      ?KernelOTLUri rdfs:subClassOf ?attributeRest .
+  ?attributeRest a owl:Restriction.
+      ?attributeRest owl:onProperty ?aspectUri.
+  ?aspectUri skos:prefLabel ?aspectName
+      Optional{?aspectUri skos:definition ?Description .                  
+        FILTER(LANG(?Description) = "en")}
+    Optional{?aspectUri skos:definition ?Description .
+                 FILTER(LANG(?Description) = "")}
+  Optional{
+    ?Requireduri skos:prefLabel "Required".
+    ?aspectUri ?Requireduri ?Required.}
+    Optional{
+    ?aspectUri tennet:dbc167879be0bc63fb1362e4b505ba27 ?AlternativeName.}
+ 
+  Optional{    
+    ?Responsibilityuri skos:prefLabel "Responsibility".
+    ?aspectUri ?Responsibilityuri ?Responsibility.
 }
-ORDER BY ?RDSCode
+
+  Optional{    
+    ?dataTypeUri skos:prefLabel "Type".
+    ?aspectUri ?dataTypeUri ?datatype.}
+  Optional{
+    ?dataSizeUri skos:prefLabel "Size".
+    ?aspectUri ?dataSizeUri ?dataSize.}
+  Optional{    
+    ?exampleUri skos:prefLabel "LPO-example".
+    ?aspectUri ?exampleUri ?example.
+}
+}
+FILTER(?Responsibility="Contractor"^^xsd:string)
+FILTER (!strstarts(str(?Description), "Relationship that is able to connect"))
+ }
+ORDER BY ?aspectName
