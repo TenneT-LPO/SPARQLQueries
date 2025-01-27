@@ -1,32 +1,42 @@
-#To be used only in the Publication Kernel OTL
-
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX tennet: <http://data.tennet.eu/def/>
+PREFIX tennet: <http://lpo.tennet.eu/data/def/>
 PREFIX nen2660: <https://w3id.org/nen2660/def#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-
-SELECT DISTINCT ?genericUri 
+ 
+SELECT DISTINCT 
+#				?genericUri 
                 ?objectName 
-                ?aspectUri 
-                ?datapropertyUri 
-                ?datapropertyName 
-                ?datapropertyDescription
-
+#                ?aspectUri 
+#                ?datapropertyUri 
+				?datapropertyName 
+				?value
+				?datapropertyDescription
+				?Required
+				?Responsibility
+				?Size
+  				?Type
+#				?Attribute
+ 
 WHERE {
     ?genericUri rdfs:subClassOf* nen2660:RealObject .
-    ?genericUri skos:prefLabel ?objectName .
-  
+#    ?genericUri skos:prefLabel ?objectName .
+	?genericUri nen2660:abbreviation ?objectName .
     ?genericUri rdfs:subClassOf ?aspectUri.
     ?aspectUri a owl:Restriction .
     ?aspectUri owl:onProperty ?datapropertyUri.
-  
-  ?datapropertyUri skos:prefLabel ?datapropertyName.
-  
-  Optional{
-    ?datapropertyUri skos:definition ?datapropertyDescription . 
+  	?datapropertyUri skos:prefLabel ?datapropertyName.
+  	Optional{?datapropertyUri tennet:9611c04b067c133827d06af394958176 ?objectName .}
+	Optional{?datapropertyUri tennet:6f6cb72d544962fa333e2e34ce64f719 ?Size.}
+	Optional{?datapropertyUri tennet:a1fa27779242b4902f7ae3bdd5c6d508 ?Type.}
+	Optional{?datapropertyUri tennet:b651efdb98a5d6bd2b3935d0c3f4a5e2 ?Required.}  
+	Optional{?datapropertyUri tennet:dee8af298acfc4c4bcb9fda657125917 ?Responsibility.}
+ 
+  	Optional{?datapropertyUri skos:definition ?datapropertyDescription . 
     FILTER(LANG(?datapropertyDescription) = "en")}
-
+	Optional{?datapropertyUri skos:definition ?datapropertyDescription . 
+	FILTER(LANG(?datapropertyDescription) = "")}
 }
+ORDER BY ?datapropertyName
