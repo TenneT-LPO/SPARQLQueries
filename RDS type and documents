@@ -1,3 +1,6 @@
+#sparql code for extract of all RDS Codes and their requirements
+
+
 PREFIX te: <http://www.w3.org/2006/time-entry#>
 PREFIX nen2660: <https://w3id.org/nen2660/def#>
 PREFIX ne: <http://umbel.org/umbel/ne/>
@@ -10,27 +13,34 @@ PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX sh: <http://www.w3.org/ns/shacl#>
 PREFIX tennet: <http://lpo.tennet.eu/data/def/>
 PREFIX base: <https://w3id.org/def/basicsemantics-owl#>
-select distinct ?RDSCode ?objectName ?documentSetName ?documentTypeName
+select distinct ?RDSName ?RDSCode ?documentSetName ?documentTypeName
 ?dccNumber
 where {
-?objectUri a owl:Class;
-skos:prefLabel ?objectName;
-rdfs:subClassOf* nen2660:RealObject;
-skos:notation ?RDSCode;
-rdfs:subClassOf ?restriction.
-?restriction owl:onClass ?documentSetUri. 
-?restriction owl:onProperty <https://w3id.org/nen2660/def#isDescribedBy>.
-filter not exists {?objectUri skos:definition "Kernel OTL Object"} 
-?documentSetUri skos:prefLabel ?documentSetName.
-?documentSetUri a owl:Class;
-skos:prefLabel ?documentSetName;
-rdfs:subClassOf* tennet:Document;
-rdfs:subClassOf ?rootDocumentSet.
-?rootDocumentSet skos:prefLabel "Document Set".
-?documentSetUri rdfs:subClassOf ?restriction1.
-?restriction1 owl:onProperty nen2660:hasPart;
-owl:onClass ?documentTypeUri.
-?documentTypeUri skos:prefLabel ?documentTypeName;
-tennet:14cf477313f196c912a7d5b3721dc5a2 ?documentID;
-tennet:58d1563337f7ff4609aadb47e349248e ?dccNumber.
+
+#RDS Code
+  ?objectUri a owl:Class;
+      skos:prefLabel ?RDSName;
+               skos:notation ?RDSCode.
+#VALUES ?RDSCode { "%UB017"}
+
+#RDS Code to Document Set
+?documentsetshape sh:targetClass ?objectUri;
+sh:property ?restriction.
+
+?restriction sh:path nen2660:isDescribedBy.
+?restriction sh:qualifiedValueShape ?subrestriction.
+
+?subrestriction sh:class ?documentseturi.
+?documentseturi skos:prefLabel ?documentSetName.
+
+  #Documentset to dcc
+optional{
+
+?documentseturi rdfs:subClassOf ?dccrestrictionname.
+?dccrestrictionname owl:onProperty nen2660:hasPart.
+?dccrestrictionname a owl:Restriction.
+?dccrestrictionname owl:onClass ?dccuri.
+?dccuri tennet:58d1563337f7ff4609aadb47e349248e ?dccNumber.
+  ?dccuri skos:prefLabel ?documentTypeName
+}
 }
