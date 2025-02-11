@@ -1,0 +1,73 @@
+#Extracts all the currently applicable asepcts, their properties
+#Excludes relationships
+#Use only in LPO Mappings Publication
+ 
+PREFIX te: <http://www.w3.org/2006/time-entry#>
+PREFIX nen2660: <https://w3id.org/nen2660/def#>
+PREFIX ne: <http://umbel.org/umbel/ne/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX tennet: <http://lpo.tennet.eu/data/def/>
+PREFIX base: <https://w3id.org/def/basicsemantics-owl#>
+ 
+select distinct ?aspectName ?AlternativeName ?Description ?Responsibility ?Required ?example ?datatype ?dataSize
+from named  <http://hub.laces.tech/tennet/lpo/live/published-kernel-otl/versions/20250121064628>
+ 
+ 
+where {
+  ?objectUri a owl:Class;
+      skos:prefLabel ?RDSName;
+               skos:notation ?RDSCode.
+ 
+  ?objectUri rdfs:subClassOf ?lpoKernelURI.
+  filter not exists {?objectUri skos:definition "Kernel OTL Object"}
+   
+  ?lpoKernelURI a owl:Class;
+  skos:prefLabel ?KernelName;
+  skos:related ?KernelOTLUri.
+ 
+  GRAPH <http://hub.laces.tech/tennet/lpo/live/published-kernel-otl/versions/20250121064628>
+{
+      ?KernelOTLUri rdfs:subClassOf* nen2660:RealObject.
+      ?KernelOTLUri nen2660:abbreviation ?NameinKernelOTL .
+      ?KernelOTLUri rdfs:subClassOf ?attributeRest .
+  ?attributeRest a owl:Restriction.
+      ?attributeRest owl:onProperty ?aspectUri.
+  ?aspectUri skos:prefLabel ?aspectName
+      Optional{?aspectUri skos:definition ?Description .                  
+               FILTER(LANG(?Description) = "en")
+
+}
+    Optional{?aspectUri skos:definition ?Description .
+                 FILTER(LANG(?Description) = "")}
+  Optional{
+    ?Requireduri skos:prefLabel "Required".
+    ?aspectUri ?Requireduri ?Required.}
+    Optional{
+#    ?Requireduri skos:prefLabel "Alternative-name".
+    ?aspectUri tennet:dbc167879be0bc63fb1362e4b505ba27 ?AlternativeName.}
+ 
+  Optional{    
+    ?Responsibilityuri skos:prefLabel "Responsibility".
+    ?aspectUri ?Responsibilityuri ?Responsibility.
+}
+  Optional{    
+    ?dataTypeUri skos:prefLabel "Type".
+    ?aspectUri ?dataTypeUri ?datatype.}
+  Optional{
+    ?dataSizeUri skos:prefLabel "Size".
+    ?aspectUri ?dataSizeUri ?dataSize.}
+  Optional{    
+    ?exampleUri skos:prefLabel "LPO-example".
+    ?aspectUri ?exampleUri ?example.
+}
+}
+FILTER(?Responsibility="Contractor"^^xsd:string)
+FILTER (!strstarts(str(?Description), "Relationship that is able to connect"))
+ }
+ORDER BY ?aspectName
