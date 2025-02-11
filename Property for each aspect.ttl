@@ -1,6 +1,7 @@
 #Extracts all the currently applicable asepcts, their properties
 #Excludes relationships
 #Use only in LPO Mappings Publication
+#Only showing Contractor specific properties
  
 PREFIX te: <http://www.w3.org/2006/time-entry#>
 PREFIX nen2660: <https://w3id.org/nen2660/def#>
