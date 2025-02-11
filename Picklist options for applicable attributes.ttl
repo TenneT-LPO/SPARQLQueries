@@ -1,0 +1,73 @@
+#Picklists
+ 
+PREFIX te: <http://www.w3.org/2006/time-entry#>
+PREFIX nen2660: <https://w3id.org/nen2660/def#>
+PREFIX ne: <http://umbel.org/umbel/ne/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX tennet: <http://lpo.tennet.eu/data/def/>
+PREFIX base: <https://w3id.org/def/basicsemantics-owl#>
+ 
+select distinct ?RDSCode ?aspectName (GROUP_CONCAT(distinct ?pV ; separator =",") AS ?picklistValues) ?AlternativeName ?Responsibility ?datatype 
+from named  <http://hub.laces.tech/tennet/lpo/live/published-kernel-otl/versions/20250121064628>
+ 
+where {
+  ?objectUri a owl:Class;
+      skos:prefLabel ?RDSName;
+               skos:notation ?RDSCode.
+ 
+  ?objectUri rdfs:subClassOf ?lpoKernelURI.
+  filter not exists {?objectUri skos:definition "Kernel OTL Object"}
+   
+  ?lpoKernelURI a owl:Class;
+  skos:prefLabel ?KernelName;
+  skos:related ?KernelOTLUri.
+
+  GRAPH <http://hub.laces.tech/tennet/lpo/live/published-kernel-otl/versions/20250121064628>
+{
+      ?KernelOTLUri rdfs:subClassOf* nen2660:RealObject.
+      ?KernelOTLUri nen2660:abbreviation ?NameinKernelOTL .
+      ?KernelOTLUri rdfs:subClassOf ?attributeRest .
+  	  ?attributeRest a owl:Restriction.
+      ?attributeRest owl:onProperty ?aspectUri.
+  ?aspectUri skos:prefLabel ?aspectName.
+      Optional{?aspectUri skos:definition ?Description .                  
+               FILTER(LANG(?Description) = "en")
+
+}
+    Optional{?aspectUri skos:definition ?Description .
+                 FILTER(LANG(?Description) = "")}
+
+    Optional{
+#    ?Requireduri skos:prefLabel "Alternative-name".
+    ?aspectUri tennet:dbc167879be0bc63fb1362e4b505ba27 ?AlternativeName.}
+ 
+  Optional{    
+    ?Responsibilityuri skos:prefLabel "Responsibility".
+    ?aspectUri ?Responsibilityuri ?Responsibility.}
+
+  Optional{    
+    ?dataTypeUri skos:prefLabel "Type".
+    ?aspectUri ?dataTypeUri ?datatype.}
+
+  #Picklist values if applicable  
+  Optional{
+    ?aspectUri ?dataTypeUri "Picklist".
+    ?genID sh:path ?aspectUri.
+    ?something sh:property ?genID.
+    ?genID sh:class ?restrictionShape.
+    ?restrictionShape a sh:NodeShape.
+    ?picklistValuesUri a ?restrictionShape.
+	?picklistValuesUri skos:prefLabel ?pV.
+
+}
+FILTER(?Responsibility="Contractor"^^xsd:string)
+FILTER (!strstarts(str(?Description), "Relationship that is able to connect"))
+
+}}
+GROUP BY ?RDSCode ?AlternativeName ?aspectName ?Responsibility ?datatype
