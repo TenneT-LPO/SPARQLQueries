@@ -1,0 +1,44 @@
+#14 lpo objects newly added
+ 
+PREFIX te: <http://www.w3.org/2006/time-entry#>
+PREFIX nen2660: <https://w3id.org/nen2660/def#>
+PREFIX ne: <http://umbel.org/umbel/ne/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX tennet: <http://lpo.tennet.eu/data/def/>
+PREFIX base: <https://w3id.org/def/basicsemantics-owl#>
+ 
+select distinct ?RDSName ?aspectName ?AlternativeName
+from named  <http://hub.laces.tech/tennet/lpo/experimental/laces-publication-kernel-otl-with-rad/versions/20250118093247>
+ 
+where {
+  ?objectUri a owl:Class;
+      skos:prefLabel ?RDSName;
+               skos:notation ?RDSCode.
+  ?objectUri rdfs:subClassOf ?lpoKernelURI.
+  filter not exists {?objectUri skos:definition "Kernel OTL Object"}
+   
+  ?lpoKernelURI a owl:Class;
+  skos:prefLabel ?KernelName;
+  skos:related ?KernelOTLUri.
+ 
+  GRAPH <http://hub.laces.tech/tennet/lpo/experimental/laces-publication-kernel-otl-with-rad/versions/20250118093247>
+{
+      ?KernelOTLUri a owl:Class.
+      ?KernelOTLUri skos:prefLabel ?NameinKernelOTL .
+      ?KernelOTLUri rdfs:subClassOf ?attributeRest .
+      ?attributeRest owl:onProperty ?aspectUri.
+      ?aspectUri a owl:DatatypeProperty.
+      ?aspectUri skos:prefLabel ?aspectName .
+    Optional{
+#    ?Requireduri skos:prefLabel "Alternative-name".
+    ?aspectUri tennet:dbc167879be0bc63fb1362e4b505ba27 ?AlternativeName.}
+#FILTER(?Responsibility="Contractor"^^xsd:string)
+}
+}
+ORDER BY ?RDSCode

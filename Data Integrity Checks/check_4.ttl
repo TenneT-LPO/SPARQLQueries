@@ -1,0 +1,17 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX tennet: <http://lpo.tennet.eu/data/def/>
+PREFIX nen2660: <https://w3id.org/nen2660/def#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+SELECT DISTINCT 
+?aspectName
+?picklistvalues
+WHERE {
+?aspectUri rdfs:subClassOf nen2660:EnumerationType.
+?aspectUri skos:prefLabel ?aspectName.
+  ?something a ?aspectUri .
+?something skos:prefLabel ?picklistvalues.
+}
